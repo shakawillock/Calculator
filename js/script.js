@@ -4,18 +4,41 @@ const operatorBtns = document.querySelectorAll('.btn-operator');
 const btnEquals = document.querySelector('.btn-equals');
 const btnDecimal = document.querySelector('.btn-decimal');
 const btnClear = document.querySelector('.btn-clear');
+
 let displayValue = '';
+let operatorValue;
+let firstNumber;
+let secondNumber;
 
 numberBtns.forEach(number => {
     number.addEventListener('click', (e) => {
       displayValue += e.target.textContent;
-      display();
+      display(displayValue);
     });
 });
 
 operatorBtns.forEach(operator => {
   operator.addEventListener('click', getCalculatorInputs)
 });
+
+btnEquals.addEventListener('click', () => {
+  secondNumber = displayValue;
+  operate(operatorValue, Number(firstNumber), Number(secondNumber));
+});
+
+btnClear.addEventListener('click', () => {
+  clearDisplay();
+});
+
+function display(value) {
+  calculatorDisplay.textContent = value;
+}
+
+function getCalculatorInputs(e) {
+  operatorValue = e.target.textContent;
+  firstNumber = displayValue;
+  displayValue = '';
+}
 
 function add(number1, number2) {
   return number1 + number2;
@@ -35,22 +58,17 @@ function divide(number1, number2) {
 
 function operate(operator, number1, number2) {
   if (operator === '+') {
-    displayValue = add(number1, number2)
+    display(add(number1, number2))
   } else if (operator === '-') {
-    displayValue = subtract(number1, number2);
+    display(subtract(number1, number2));
   } else if (operator === '*') {
-    displayValue = multiply(number1, number2);
+    display(multiply(number1, number2));
   } else {
-    displayValue = divide(number1, number2);
+    display(divide(number1, number2));
   }
 }
 
-function display() {
-  calculatorDisplay.textContent = displayValue;
-}
-
-function getCalculatorInputs(e) {
- let operatorValue = e.target.textContent;
- let firstNumber = displayValue;
- displayValue = '';
+function clearDisplay() {
+  displayValue = '';
+  display(displayValue);
 }
