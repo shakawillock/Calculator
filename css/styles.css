@@ -58,8 +58,3 @@ button {
 .row:last-of-type .col:last-of-type {
   flex: 1;  
 }
-
-.footer {
-  font-size: 1.125rem;
-  text-align: center;
-}
