@@ -72,18 +72,19 @@ function operate(operator, number1, number2) {
 
   if (operator === '+') {
     result = add(number1, number2);
-    display(result)
   } else if (operator === '-') {
     result = subtract(number1, number2);
-    display(result);
   } else if (operator === '*') {
     result = multiply(number1, number2);
-    display(result);
   } else {
     result = divide(number1, number2);
-    display(result);
   }
 
+  if (checkForDecimal(result)) {
+    result = checkForDecimal(result);
+  }
+  
+  display(result);
   return result;
 }
 
@@ -96,4 +97,10 @@ function clearInputs() {
   operatorValue = undefined;
   firstNumber = undefined;
   secondNumber = undefined;
+}
+
+function checkForDecimal(result) {
+  if (!Number.isInteger(result)) {
+    return +result.toFixed(3);
+  }
 }
