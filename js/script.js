@@ -1,9 +1,9 @@
 const calculatorDisplay = document.querySelector('.calculator__display');
 const numberBtns = document.querySelectorAll('.btn-number');
 const operatorBtns = document.querySelectorAll('.btn-operator');
-const btnEquals = document.querySelector('.btn-equals');
+const equalBtn = document.querySelector('.btn-equals');
 const btnDecimal = document.querySelector('.btn-decimal');
-const btnClear = document.querySelector('.btn-clear');
+const clearBtn = document.querySelector('.btn-clear');
 
 let displayValue = '';
 let operatorValue;
@@ -21,13 +21,14 @@ operatorBtns.forEach(operator => {
   operator.addEventListener('click', getCalculatorInputs)
 });
 
-btnEquals.addEventListener('click', () => {
+equalBtn.addEventListener('click', () => {
   secondNumber = displayValue;
   operate(operatorValue, Number(firstNumber), Number(secondNumber));
 });
 
-btnClear.addEventListener('click', () => {
+clearBtn.addEventListener('click', () => {
   clearDisplay();
+  clearInputs();
 });
 
 function display(value) {
@@ -35,8 +36,14 @@ function display(value) {
 }
 
 function getCalculatorInputs(e) {
-  operatorValue = e.target.textContent;
-  firstNumber = displayValue;
+  if (operatorValue) {
+    firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
+    operatorValue = e.target.textContent;
+  } else {
+    operatorValue = e.target.textContent;
+    firstNumber = displayValue;
+  }
+
   displayValue = '';
 }
 
@@ -57,18 +64,32 @@ function divide(number1, number2) {
 }
 
 function operate(operator, number1, number2) {
+  let result;
+
   if (operator === '+') {
-    display(add(number1, number2))
+    result = add(number1, number2);
+    display(result)
   } else if (operator === '-') {
-    display(subtract(number1, number2));
+    result = subtract(number1, number2);
+    display(result);
   } else if (operator === '*') {
-    display(multiply(number1, number2));
+    result = multiply(number1, number2);
+    display(result);
   } else {
-    display(divide(number1, number2));
+    result = divide(number1, number2);
+    display(result);
   }
+
+  return result;
 }
 
 function clearDisplay() {
   displayValue = '';
   display(displayValue);
+}
+
+function clearInputs() {
+  operatorValue = undefined;
+  firstNumber = undefined;
+  secondNumber = undefined;
 }
