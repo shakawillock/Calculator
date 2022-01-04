@@ -11,14 +11,13 @@ let firstNumber;
 let secondNumber;
 
 numberBtns.forEach(number => {
-    number.addEventListener('click', (e) => {
-      displayValue += e.target.textContent;
-      display(displayValue);
-    });
+    number.addEventListener('click', updateDisplayValue);
 });
 
+btnDecimal.addEventListener('click', updateDisplayValue);
+
 operatorBtns.forEach(operator => {
-  operator.addEventListener('click', getCalculatorInputs)
+  operator.addEventListener('click', getCalculatorInputs);
 });
 
 equalBtn.addEventListener('click', () => {
@@ -30,6 +29,11 @@ clearBtn.addEventListener('click', () => {
   clearDisplay();
   clearInputs();
 });
+
+function updateDisplayValue(e) {
+  displayValue += e.target.textContent;
+  display(displayValue);
+}
 
 function display(value) {
   calculatorDisplay.textContent = value;
