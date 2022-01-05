@@ -4,6 +4,7 @@ const operatorBtns = document.querySelectorAll('.btn-operator');
 const equalBtn = document.querySelector('.btn-equals');
 const decimalBtn = document.querySelector('.btn-decimal');
 const clearBtn = document.querySelector('.btn-clear');
+const backspaceBtn = document.querySelector('.btn-backspace');
 
 let displayValue = '';
 let operatorValue;
@@ -27,34 +28,10 @@ equalBtn.addEventListener('click', () => {
 
 clearBtn.addEventListener('click', () => {
   clearDisplay();
-  clearInputs();
+  reset();
 });
 
-function addDecimalToDisplay(e) {
-  updateDisplayValue(e);
-}
-
-function updateDisplayValue(e) {
-  displayValue += e.target.textContent;
-  checkForDecimal();
-  display(displayValue);
-}
-
-function display(value) {
-  calculatorDisplay.textContent = value;
-}
-
-function getCalculatorInputs(e) {
-  if (operatorValue) {
-    firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
-    operatorValue = e.target.textContent;
-  } else {
-    operatorValue = e.target.textContent;
-    firstNumber = displayValue;
-  }
-
-  displayValue = '';
-}
+backspaceBtn.addEventListener('click', deleteNumber);
 
 function add(number1, number2) {
   return number1 + number2;
@@ -72,36 +49,39 @@ function divide(number1, number2) {
   return number1 / number2;
 }
 
-function operate(operator, number1, number2) {
-  let result;
-
-  if (operator === '+') {
-    result = add(number1, number2);
-  } else if (operator === '-') {
-    result = subtract(number1, number2);
-  } else if (operator === '*') {
-    result = multiply(number1, number2);
-  } else {
-    result = divide(number1, number2);
-  }
-
-  if (roundDecimals(result)) {
-    result = roundDecimals(result);
-  }
-  
-  display(result);
-  return result;
+function remainder(number1, number2) {
+  return number1 % number2;
 }
 
-function clearDisplay() {
-  displayValue = '';
+function display(value) {
+  calculatorDisplay.textContent = value;
+}
+
+function updateDisplayValue(e) {
+  displayValue += e.target.textContent;
+  checkForDecimal();
   display(displayValue);
 }
 
-function clearInputs() {
-  operatorValue = undefined;
-  firstNumber = undefined;
-  secondNumber = undefined;
+function getCalculatorInputs(e) {
+  if (operatorValue) {
+    firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
+    operatorValue = e.target.textContent;
+  } else {
+    operatorValue = e.target.textContent;
+    firstNumber = displayValue;
+  }
+
+  displayValue = '';
+}
+
+function deleteNumber() {
+  displayValue = displayValue.slice(0, -1); 
+  display(displayValue);
+}
+
+function addDecimalToDisplay(e) {
+  updateDisplayValue(e);
 }
 
 function checkForDecimal() {
@@ -126,4 +106,40 @@ function checkInputs() {
       operate(operatorValue, Number(firstNumber), Number(secondNumber));
     }
   } 
+}
+
+function operate(operator, number1, number2) {
+  let result;
+
+  if (operator === '+') {
+    result = add(number1, number2);
+  } else if (operator === '-') {
+    result = subtract(number1, number2);
+  } else if (operator === '*') {
+    result = multiply(number1, number2);
+  } else if (operator === '/') {
+    result = divide(number1, number2);
+  } else {
+    result = remainder(number1, number2);
+  }
+
+  if (roundDecimals(result)) {
+    result = roundDecimals(result);
+  }
+  
+  display(result);
+  backspaceBtn.removeEventListener('click', deleteNumber);
+  return result;
+}
+
+function clearDisplay() {
+  displayValue = '';
+  display(displayValue);
+}
+
+function reset() {
+  operatorValue = undefined;
+  firstNumber = undefined;
+  secondNumber = undefined;
+  backspaceBtn.addEventListener('click', deleteNumber);
 }
