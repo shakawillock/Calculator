@@ -2,7 +2,7 @@ const calculatorDisplay = document.querySelector('.calculator__display');
 const numberBtns = document.querySelectorAll('.btn-number');
 const operatorBtns = document.querySelectorAll('.btn-operator');
 const equalBtn = document.querySelector('.btn-equals');
-const btnDecimal = document.querySelector('.btn-decimal');
+const decimalBtn = document.querySelector('.btn-decimal');
 const clearBtn = document.querySelector('.btn-clear');
 
 let displayValue = '';
@@ -14,7 +14,7 @@ numberBtns.forEach(number => {
     number.addEventListener('click', updateDisplayValue);
 });
 
-btnDecimal.addEventListener('click', updateDisplayValue);
+decimalBtn.addEventListener('click', addDecimalToDisplay);
 
 operatorBtns.forEach(operator => {
   operator.addEventListener('click', getCalculatorInputs);
@@ -22,7 +22,7 @@ operatorBtns.forEach(operator => {
 
 equalBtn.addEventListener('click', () => {
   secondNumber = displayValue;
-  operate(operatorValue, Number(firstNumber), Number(secondNumber));
+  checkInputs();
 });
 
 clearBtn.addEventListener('click', () => {
@@ -30,8 +30,13 @@ clearBtn.addEventListener('click', () => {
   clearInputs();
 });
 
+function addDecimalToDisplay(e) {
+  updateDisplayValue(e);
+}
+
 function updateDisplayValue(e) {
   displayValue += e.target.textContent;
+  checkForDecimal();
   display(displayValue);
 }
 
@@ -80,8 +85,8 @@ function operate(operator, number1, number2) {
     result = divide(number1, number2);
   }
 
-  if (checkForDecimal(result)) {
-    result = checkForDecimal(result);
+  if (roundDecimals(result)) {
+    result = roundDecimals(result);
   }
   
   display(result);
@@ -99,8 +104,26 @@ function clearInputs() {
   secondNumber = undefined;
 }
 
-function checkForDecimal(result) {
+function checkForDecimal() {
+  if (displayValue.includes('.')) {
+    decimalBtn.removeEventListener('click', addDecimalToDisplay);
+  } else {
+    decimalBtn.addEventListener('click', addDecimalToDisplay);
+  }
+}
+
+function roundDecimals(result) {
   if (!Number.isInteger(result)) {
     return +result.toFixed(3);
   }
+}
+
+function checkInputs() {
+  if (operatorValue && firstNumber && secondNumber) {
+    if (secondNumber == 0) {
+      alert("You can't divide by 0!");
+    } else {
+      operate(operatorValue, Number(firstNumber), Number(secondNumber));
+    }
+  } 
 }
