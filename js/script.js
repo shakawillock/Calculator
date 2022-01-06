@@ -66,12 +66,10 @@ function updateDisplayValue(e) {
 function getCalculatorInputs(e) {
   if (operatorValue) {
     firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
-    operatorValue = e.target.textContent;
   } else {
-    operatorValue = e.target.textContent;
     firstNumber = displayValue;
   }
-
+  operatorValue = e.target.textContent;
   displayValue = '';
 }
 
