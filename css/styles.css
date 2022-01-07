@@ -64,3 +64,10 @@ button {
 .row:last-of-type .col:last-of-type {
   flex: 1;  
 }
+
+@media (max-width: 420px) {
+  .container {
+    max-width: 330px;
+    padding-top: 0;
+  }
+}
