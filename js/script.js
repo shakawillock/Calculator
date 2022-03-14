@@ -11,27 +11,28 @@ let operatorValue;
 let firstNumber;
 let secondNumber;
 
-numberBtns.forEach(number => {
-    number.addEventListener('click', updateDisplayValue);
-});
+function display(value) {
+  calculatorDisplay.textContent = value;
+}
 
-decimalBtn.addEventListener('click', addDecimalToDisplay);
+function addDecimalToDisplay(e) {
+  // eslint-disable-next-line no-use-before-define
+  updateDisplayValue(e);
+}
 
-operatorBtns.forEach(operator => {
-  operator.addEventListener('click', getCalculatorInputs);
-});
+function checkForDecimal() {
+  if (displayValue.includes('.')) {
+    decimalBtn.removeEventListener('click', addDecimalToDisplay);
+  } else {
+    decimalBtn.addEventListener('click', addDecimalToDisplay);
+  }
+}
 
-equalBtn.addEventListener('click', () => {
-  secondNumber = displayValue;
-  checkInputs();
-});
-
-clearBtn.addEventListener('click', () => {
-  clearDisplay();
-  reset();
-});
-
-backspaceBtn.addEventListener('click', deleteNumber);
+function updateDisplayValue(e) {
+  displayValue += e.target.textContent;
+  checkForDecimal();
+  display(displayValue);
+}
 
 function add(number1, number2) {
   return number1 + number2;
@@ -53,57 +54,28 @@ function remainder(number1, number2) {
   return number1 % number2;
 }
 
-function display(value) {
-  calculatorDisplay.textContent = value;
-}
-
-function updateDisplayValue(e) {
-  displayValue += e.target.textContent;
-  checkForDecimal();
-  display(displayValue);
-}
-
-function getCalculatorInputs(e) {
-  if (operatorValue) {
-    firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
-  } else {
-    firstNumber = displayValue;
-  }
-  operatorValue = e.target.textContent;
-  displayValue = '';
-}
-
-function deleteNumber() {
-  displayValue = displayValue.slice(0, -1); 
-  display(displayValue);
-}
-
-function addDecimalToDisplay(e) {
-  updateDisplayValue(e);
-}
-
-function checkForDecimal() {
-  if (displayValue.includes('.')) {
-    decimalBtn.removeEventListener('click', addDecimalToDisplay);
-  } else {
-    decimalBtn.addEventListener('click', addDecimalToDisplay);
-  }
-}
-
 function roundDecimals(result) {
   if (!Number.isInteger(result)) {
     return +result.toFixed(3);
   }
+  return false;
 }
 
-function checkInputs() {
-  if (operatorValue && firstNumber && secondNumber) {
-    if (secondNumber == 0) {
-      alert("You can't divide by 0!");
-    } else {
-      operate(operatorValue, Number(firstNumber), Number(secondNumber));
-    }
-  } 
+function deleteNumber() {
+  displayValue = displayValue.slice(0, -1);
+  display(displayValue);
+}
+
+function clearDisplay() {
+  displayValue = '';
+  display(displayValue);
+}
+
+function reset() {
+  operatorValue = undefined;
+  firstNumber = undefined;
+  secondNumber = undefined;
+  backspaceBtn.addEventListener('click', deleteNumber);
 }
 
 function operate(operator, number1, number2) {
@@ -124,20 +96,51 @@ function operate(operator, number1, number2) {
   if (roundDecimals(result)) {
     result = roundDecimals(result);
   }
-  
+
   display(result);
   backspaceBtn.removeEventListener('click', deleteNumber);
   return result;
 }
 
-function clearDisplay() {
+function getCalculatorInputs(e) {
+  if (operatorValue) {
+    firstNumber = operate(operatorValue, Number(firstNumber), Number(displayValue));
+  } else {
+    firstNumber = displayValue;
+  }
+  operatorValue = e.target.textContent;
   displayValue = '';
-  display(displayValue);
 }
 
-function reset() {
-  operatorValue = undefined;
-  firstNumber = undefined;
-  secondNumber = undefined;
-  backspaceBtn.addEventListener('click', deleteNumber);
+function checkInputs() {
+  if (operatorValue && firstNumber && secondNumber) {
+    if (secondNumber === 0) {
+      // eslint-disable-next-line no-alert
+      alert("You can't divide by 0!");
+    } else {
+      operate(operatorValue, Number(firstNumber), Number(secondNumber));
+    }
+  }
 }
+
+numberBtns.forEach((number) => {
+  number.addEventListener('click', updateDisplayValue);
+});
+
+decimalBtn.addEventListener('click', addDecimalToDisplay);
+
+operatorBtns.forEach((operator) => {
+  operator.addEventListener('click', getCalculatorInputs);
+});
+
+equalBtn.addEventListener('click', () => {
+  secondNumber = displayValue;
+  checkInputs();
+});
+
+clearBtn.addEventListener('click', () => {
+  clearDisplay();
+  reset();
+});
+
+backspaceBtn.addEventListener('click', deleteNumber);

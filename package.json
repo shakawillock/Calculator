@@ -1,0 +1,25 @@
+{
+  "name": "calculator-top",
+  "version": "1.0.0",
+  "description": "Calculator created using HTML, CSS and JavaScript for The Odin Project.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shakawillock/calculator-top.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shakawillock/calculator-top/issues"
+  },
+  "homepage": "https://github.com/shakawillock/calculator-top#readme",
+  "devDependencies": {
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  }
+}
